@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rainbow Brite Etch-a-sketch</title>
+  <style>
+    body {
+      background-color: black;
+    }
+
+    .rainbow-text {
+      background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    .instructions {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: medium;
+      font-weight: bold;
+      color: azure;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding-top: 50px;
+      text-align: center;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(50, 1fr);
+      grid-gap: 1px;
+      background-color: white;
+    }
+
+    .square {
+      width: 100%;
+      padding-bottom: 100%;
+      background-color: black;
+    }
+
+    .square:hover {
+      background-color: randomColor();
+    }
+
+    .button {
+      margin-bottom: 20px;
+    }
+  </style>
+  <script>
+    function randomColor() {
+      var colors = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#00FFFF", "#FF00FF"];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function resetGrid() {
+      var squares = document.getElementsByClassName("square");
+      for (var i = 0; i < squares.length; i++) {
+        squares[i].style.backgroundColor = "black";
+      }
+    }
+    var scrollCount = 0;
+    var scrollTimeout;
+    var isScrolling = false;
+
+    function handleScroll() {
+      if (!isScrolling) {
+        scrollCount++;
+        isScrolling = true;
+        clearTimeout(scrollTimeout);
+
+        scrollTimeout = setTimeout(function() {
+          isScrolling = false;
+          if (scrollCount >= 4) {
+            resetGrid();
+            scrollCount = 0;
+          }
+        }, 500);
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1 style="font-family: 'Courier New', Courier, monospace; font-weight: bolder;" class="rainbow-text">Welcome to Max's Online Etch-a-Sketch</h1>
+    <p class="instructions">Try rapidly scrolling up and down...</p>
+    <button class="button" onclick="resetGrid()">Reset</button>
+    <div class="grid-container">
+      <!-- Grid squares will be dynamically added here -->
+    </div>
+  </div>
+
+  <script>
+    var gridContainer = document.querySelector('.grid-container');
+    for (var i = 0; i < 50 * 50; i++) {
+      var square = document.createElement('div');
+      square.className = 'square';
+      square.addEventListener('mouseover', function() {
+        this.style.backgroundColor = randomColor();
+      });
+      gridContainer.appendChild(square);
+    }
+  </script>
+</body>
+</html>
